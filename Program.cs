@@ -2,75 +2,38 @@ using System;
 using System.Collections.Generic;
 namespace MSTestProlems
 {
-    public class PurchaseAnalyzer
+    public class GroupEligibilityChecker
+{
+    public bool IsGroupEligible(string word1, string word2)
     {
-        public int GetPriceOfItemSoldOnce(string purchases)
+        if (word1.Length != word2.Length)
         {
-            var prices = GetPrices(purchases);
-            var priceCount = CountPrices(prices);
-
-            foreach (var kvp in priceCount)
-            {
-                if (kvp.Value == 1)
-                {
-                    return kvp.Key;
-                }
-            }
-
-            return 0;
+            return false;
         }
 
-        public int GetPriceOfItemSoldMoreThanOnce(string purchases)
+        int[] counts = new int[26];
+
+        foreach (char c in word1)
         {
-            var prices = GetPrices(purchases);
-            var priceCount = CountPrices(prices);
-
-            foreach (var kvp in priceCount)
-            {
-                if (kvp.Value > 1)
-                {
-                    return kvp.Key;
-                }
-            }
-
-            return 0; 
+            counts[c - 'a']++;
         }
 
-        private List<int> GetPrices(string purchases)
+        foreach (char c in word2)
         {
-            var prices = new List<int>();
-            var purchaseArray = purchases.Split(' ');
-
-            foreach (var purchase in purchaseArray)
-            {
-                if (int.TryParse(purchase, out int price))
-                {
-                    prices.Add(price);
-                }
-            }
-
-            return prices;
+            counts[c - 'a']--;
         }
 
-        private Dictionary<int, int> CountPrices(List<int> prices)
+        foreach (int count in counts)
         {
-            var priceCount = new Dictionary<int, int>();
-
-            foreach (var price in prices)
+            if (count != 0)
             {
-                if (priceCount.ContainsKey(price))
-                {
-                    priceCount[price]++;
-                }
-                else
-                {
-                    priceCount[price] = 1;
-                }
+                return false;
             }
-
-            return priceCount;
         }
+
+        return true;
     }
+}
 
 
 }
